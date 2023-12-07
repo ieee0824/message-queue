@@ -7,7 +7,7 @@ import (
 )
 
 type MessageQueue[T any] interface {
-	Send(ctx context.Context, msgs message.Message[T]) error
+	Send(ctx context.Context, rawMsg T) error
 	Receives(ctx context.Context) ([]message.Message[T], error)
 	Delete(ctx context.Context, msg message.Message[T]) error
 }

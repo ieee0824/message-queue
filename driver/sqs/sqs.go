@@ -82,11 +82,13 @@ func (impl *SQSDriver[T]) parseMsgStr(msgStr string) (message.Message[T], error)
 	return msg, nil
 }
 
-func (impl *SQSDriver[T]) Send(octx context.Context, msgs message.Message[T]) error {
+func (impl *SQSDriver[T]) Send(octx context.Context, msg T) error {
 	ctx, cancel := context.WithTimeout(octx, impl.clientTimeout)
 	defer cancel()
 
-	msgStr, err := impl.convertMsgStr(msgs)
+	msgStr, err := impl.convertMsgStr(message.Message[T]{
+		Body: msg,
+	})
 	if err != nil {
 		return fmt.Errorf("failed to convert message: %w", err)
 	}
